@@ -11,12 +11,9 @@ import org.sample.ytech.stock.usecase.RetrieveSingleStockUseCase;
 @DomainComponent
 public class RetrieveSingleStockUseCaseHandler extends ObservableUseCasePublisher implements UseCaseHandler<Stock, RetrieveSingleStockUseCase> {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     private final StockPort stockPort;
 
-    public RetrieveSingleStockUseCaseHandler(BeanAwareUseCasePublisher publisher, StockPort stockPort) {
-        this.publisher = publisher;
+    public RetrieveSingleStockUseCaseHandler(StockPort stockPort) {
         this.stockPort = stockPort;
         register(RetrieveSingleStockUseCase.class, this);
     }

@@ -14,16 +14,12 @@ import org.sample.ytech.product.usecase.RetrieveSingleProductUseCase;
 @DomainComponent
 public class RetrieveSingleProductUseCaseHandler extends ObservableUseCasePublisher implements UseCaseHandler<Product, RetrieveSingleProductUseCase> {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     private final ProductPort productPort;
 
-    public RetrieveSingleProductUseCaseHandler(BeanAwareUseCasePublisher publisher, ProductPort productPort) {
-        this.publisher = publisher;
+    public RetrieveSingleProductUseCaseHandler(ProductPort productPort) {
         this.productPort = productPort;
         register(RetrieveSingleProductUseCase.class, this);
     }
-
 
     @Override
     public Product handle(RetrieveSingleProductUseCase useCase) {

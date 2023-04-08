@@ -19,21 +19,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class DepotController extends BaseController {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     @GetMapping(value = "/{depotId}")
     public Response<DepotDto> getDepot(@PathVariable Long depotId) throws UnknownProjectException {
         var retrieveSingleDepot = RetrieveSingleDepotUseCase.builder()
                 .depotId(depotId)
                 .build();
-        var depot = publisher.publish(Depot.class, retrieveSingleDepot);
+        var depot = publish(Depot.class, retrieveSingleDepot);
         return respond(DepotDto.fromModel(depot));
     }
 
     @PostMapping
     public Response<CreateDepotResponse> createDepot(@RequestBody CreateDepotRequest createDepotRequest) {
         CreateDepotUseCase createDepotUseCase = createDepotRequest.toUseCase();
-        var createDepotProcessResult = publisher.publish(CreateDepotProcessResult.class, createDepotUseCase);
+        var createDepotProcessResult = publish(CreateDepotProcessResult.class, createDepotUseCase);
         return respond(CreateDepotResponse.fromModel(createDepotProcessResult));
     }
 

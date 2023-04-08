@@ -18,16 +18,12 @@ import java.util.List;
 @DomainComponent
 public class CreateProductUseCaseHandler extends ObservableUseCasePublisher implements UseCaseHandler<CreateProductProcessResult, CreateProductUseCase> {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     private final ProductPort productPort;
 
-    public CreateProductUseCaseHandler(BeanAwareUseCasePublisher publisher, ProductPort productPort) {
-        this.publisher = publisher;
+    public CreateProductUseCaseHandler(ProductPort productPort) {
         this.productPort = productPort;
         register(CreateProductUseCase.class, this);
     }
-
 
     @Override
     public CreateProductProcessResult handle(CreateProductUseCase useCase) {

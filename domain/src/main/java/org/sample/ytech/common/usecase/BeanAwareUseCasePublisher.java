@@ -3,7 +3,6 @@ package org.sample.ytech.common.usecase;
 import org.sample.ytech.common.DomainComponent;
 import org.sample.ytech.common.model.UseCase;
 
-@DomainComponent
 public class BeanAwareUseCasePublisher implements UseCasePublisher {
 
     @Override

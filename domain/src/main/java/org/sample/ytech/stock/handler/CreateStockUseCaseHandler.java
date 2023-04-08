@@ -6,8 +6,10 @@ import org.sample.ytech.common.usecase.ObservableUseCasePublisher;
 import org.sample.ytech.common.usecase.UseCaseHandler;
 import org.sample.ytech.depot.model.Depot;
 import org.sample.ytech.depot.port.DepotPort;
+import org.sample.ytech.depot.usecase.RetrieveSingleDepotWithTypeUseCase;
 import org.sample.ytech.product.model.Product;
 import org.sample.ytech.product.port.ProductPort;
+import org.sample.ytech.product.usecase.RetrieveSingleProductUseCase;
 import org.sample.ytech.stock.model.CreateStockProcessResult;
 import org.sample.ytech.stock.model.Stock;
 import org.sample.ytech.stock.port.StockPort;
@@ -16,19 +18,15 @@ import org.sample.ytech.stock.usecase.CreateStockUseCase;
 @DomainComponent
 public class CreateStockUseCaseHandler extends ObservableUseCasePublisher implements UseCaseHandler<CreateStockProcessResult, CreateStockUseCase> {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     private final StockPort stockPort;
 
     private final DepotPort depotPort;
 
     private final ProductPort productPort;
 
-    public CreateStockUseCaseHandler(BeanAwareUseCasePublisher publisher,
-                                     StockPort stockPort,
+    public CreateStockUseCaseHandler(StockPort stockPort,
                                      DepotPort depotPort,
                                      ProductPort productPort) {
-        this.publisher = publisher;
         this.stockPort = stockPort;
         this.depotPort = depotPort;
         this.productPort = productPort;
@@ -37,9 +35,11 @@ public class CreateStockUseCaseHandler extends ObservableUseCasePublisher implem
 
     @Override
     public CreateStockProcessResult handle(CreateStockUseCase useCase) {
-        Depot depot = depotPort.retrieveDepotByType(1).stream()
-                .findFirst()
-                .orElse(null);
+        RetrieveSingleDepotWithTypeUseCase retrieveSingleDepotWithTypeUseCase = RetrieveSingleDepotWithTypeUseCase.builder()
+                .type(1)
+                .build();
+
+        Depot depot = publish(Depot.class, retrieveSingleDepotWithTypeUseCase);
 
         if (depot == null) {
             return CreateStockProcessResult.builder()
@@ -48,7 +48,11 @@ public class CreateStockUseCaseHandler extends ObservableUseCasePublisher implem
                     .build();
         }
 
-        Product product = productPort.retrieveProduct(useCase.getProductId());
+        RetrieveSingleProductUseCase retrieveSingleProductUseCase = RetrieveSingleProductUseCase.builder()
+                .productId(useCase.getProductId())
+                .build();
+
+        Product product = publish(Product.class, retrieveSingleProductUseCase);
 
         if (product == null) {
             return CreateStockProcessResult.builder()

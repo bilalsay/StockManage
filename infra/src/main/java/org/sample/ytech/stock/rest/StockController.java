@@ -23,28 +23,26 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class StockController extends BaseController {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     @GetMapping(value = "/{stockId}")
     public Response<StockDto> getProduct(@PathVariable Long stockId) throws UnknownProjectException {
         var retrieveSingleStock = RetrieveSingleStockUseCase.builder()
                 .stockId(stockId)
                 .build();
-        var stock = publisher.publish(Stock.class, retrieveSingleStock);
+        var stock = publish(Stock.class, retrieveSingleStock);
         return respond(StockDto.fromModel(stock));
     }
 
     @PostMapping
     public Response<CreateStockResponse> createStock(@RequestBody CreateStockRequest createStockRequest) {
         CreateStockUseCase createStockUseCase = createStockRequest.toUseCase();
-        var createStockProcessResult = publisher.publish(CreateStockProcessResult.class, createStockUseCase);
+        var createStockProcessResult = publish(CreateStockProcessResult.class, createStockUseCase);
         return respond(CreateStockResponse.fromModel(createStockProcessResult));
     }
 
     @PostMapping(value = "/transfer")
     public Response<TransferStockResponse> transferStock(@RequestBody TransferStockRequest transferStockRequest) {
         TransferStockUseCase transferStockUseCase = transferStockRequest.toUseCase();
-        var transferStockProcessResult = publisher.publish(TransferStockProcessResult.class, transferStockUseCase);
+        var transferStockProcessResult = publish(TransferStockProcessResult.class, transferStockUseCase);
         return respond(TransferStockResponse.fromModel(transferStockProcessResult));
     }
 }

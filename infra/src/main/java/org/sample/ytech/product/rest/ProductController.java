@@ -23,21 +23,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController extends BaseController {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     @GetMapping(value = "/{productId}")
     public Response<ProductDto> getProduct(@PathVariable Long productId) throws UnknownProjectException {
         var retrieveSingleProduct = RetrieveSingleProductUseCase.builder()
                 .productId(productId)
                 .build();
-        var product = publisher.publish(Product.class, retrieveSingleProduct);
+        var product = publish(Product.class, retrieveSingleProduct);
         return respond(ProductDto.fromModel(product));
     }
 
     @PostMapping
     public Response<CreateProductResponse> createDepot(@RequestBody CreateProductRequest createProductRequest) {
         CreateProductUseCase createProductUseCase = createProductRequest.toUseCase();
-        var createProductProcessResult = publisher.publish(CreateProductProcessResult.class, createProductUseCase);
+        var createProductProcessResult = publish(CreateProductProcessResult.class, createProductUseCase);
         return respond(CreateProductResponse.fromModel(createProductProcessResult));
     }
 

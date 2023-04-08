@@ -14,12 +14,9 @@ import java.util.List;
 @DomainComponent
 public class CreateDepotUseCaseHandler extends ObservableUseCasePublisher implements UseCaseHandler<CreateDepotProcessResult, CreateDepotUseCase> {
 
-    private final BeanAwareUseCasePublisher publisher;
-
     private final DepotPort depotPort;
 
-    public CreateDepotUseCaseHandler(BeanAwareUseCasePublisher publisher, DepotPort depotPort) {
-        this.publisher = publisher;
+    public CreateDepotUseCaseHandler(DepotPort depotPort) {
         this.depotPort = depotPort;
         register(CreateDepotUseCase.class, this);
     }
